@@ -1,10 +1,12 @@
-// TODO: Add a balance factor to expand the size of HashTable
+const SIZE_THRESHOLD = 0.75;
 export class HashTable {
-  constructor(size = 4) {
+  balanceFactor = 4;
+  count = 0;
+
+  constructor(size = this.balanceFactor) {
     this.data = new Array(size);
   }
 
-  // TODO: we should use another hash function mentioned in the pdf
   _hash(key) {
     let hash = 0;
 
@@ -23,6 +25,11 @@ export class HashTable {
     }
 
     this.data[address].push([key, value]);
+    this.count++;
+
+    if (this.count / this.data.length >= SIZE_THRESHOLD) {
+      this._resize();
+    }
 
     return this.data;
   }
@@ -42,5 +49,25 @@ export class HashTable {
     }
 
     return undefined;
+  }
+
+  _resize() {
+    const newSize = this.data.length + this.balanceFactor * 2;
+    const oldData = this.data;
+    this.data = new Array(newSize);
+    this.count = 0; // Reset the count.
+
+    // Rehash all existing items
+    for (let index = 0; index < oldData.length; index++) {
+      const bucket = oldData[index];
+
+      if (bucket) {
+        for (const [key, value] of bucket) {
+          this.set(key, value);
+        }
+      }
+    }
+
+    this.balanceFactor = newSize;
   }
 }
