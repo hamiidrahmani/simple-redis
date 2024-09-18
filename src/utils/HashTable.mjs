@@ -1,10 +1,13 @@
-// TODO: Add a balance factor to expand the size of HashTable
+const SIZE_THRESHOLD = 0.8;
 export class HashTable {
-  constructor(size = 4) {
+  balanceFactor = 4;
+  count = 0;
+
+  constructor(size = this.balanceFactor) {
     this.data = new Array(size);
   }
 
-  // TODO: we should use another hash function mentioned in the pdf
+  // TODO: Use fnv1n hash function to hash the key.
   _hash(key) {
     let hash = 0;
 
@@ -23,6 +26,11 @@ export class HashTable {
     }
 
     this.data[address].push([key, value]);
+    this.count++;
+
+    if (this.count / this.data.length >= SIZE_THRESHOLD) {
+      this._resize();
+    }
 
     return this.data;
   }
@@ -42,5 +50,27 @@ export class HashTable {
     }
 
     return undefined;
+  }
+
+  // TODO: Make it dynamic hash table.
+  // TODO: Hold a generation value.
+  _resize() {
+    const newSize = this.balanceFactor * 2;
+    const oldData = this.data;
+    this.data = new Array(newSize);
+    this.count = 0; // Reset the count.
+
+    // Rehash all existing items
+    for (let index = 0; index < oldData.length; index++) {
+      const bucket = oldData[index];
+
+      if (bucket) {
+        for (const [key, value] of bucket) {
+          this.set(key, value);
+        }
+      }
+    }
+
+    this.balanceFactor = newSize;
   }
 }

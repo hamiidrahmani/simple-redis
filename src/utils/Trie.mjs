@@ -1,8 +1,11 @@
+import { HashTable } from "./HashTable.mjs";
+
 class TrieNode {
   constructor(key, value) {
     this.key = key;
     this.value = value;
     this.children = [];
+    this.type = ""; // string | HashTable
   }
 }
 
@@ -38,6 +41,25 @@ export class Trie {
       } else {
         return null;
       }
+    }
+  }
+
+  hGet(key, field) {
+    const currentBucket = this.get(key);
+
+    return currentBucket.value.get(field);
+  }
+
+  hSet(key, field, value) {
+    const currentBucket = this.get(key);
+
+    if (currentBucket) {
+      currentBucket.value.set(field, value);
+    } else {
+      const hashTable = new HashTable();
+      hashTable.set(field, value);
+
+      this.set(key, hashTable);
     }
   }
 }
