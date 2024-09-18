@@ -1,4 +1,4 @@
-const SIZE_THRESHOLD = 0.75;
+const SIZE_THRESHOLD = 0.8;
 export class HashTable {
   balanceFactor = 4;
   count = 0;
@@ -7,6 +7,7 @@ export class HashTable {
     this.data = new Array(size);
   }
 
+  // TODO: Use fnv1n hash function to hash the key.
   _hash(key) {
     let hash = 0;
 
@@ -51,8 +52,10 @@ export class HashTable {
     return undefined;
   }
 
+  // TODO: Make it dynamic hash table.
+  // TODO: Hold a generation value.
   _resize() {
-    const newSize = this.data.length + this.balanceFactor * 2;
+    const newSize = this.balanceFactor * 2;
     const oldData = this.data;
     this.data = new Array(newSize);
     this.count = 0; // Reset the count.

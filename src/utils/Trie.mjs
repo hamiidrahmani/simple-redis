@@ -5,6 +5,7 @@ class TrieNode {
     this.key = key;
     this.value = value;
     this.children = [];
+    this.type = ""; // string | HashTable
   }
 }
 
