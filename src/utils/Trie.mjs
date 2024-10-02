@@ -1,4 +1,4 @@
-import { HashTable } from "./HashTable.mjs";
+import { IncrementalHashTable } from "./IncrementalHashTable.mjs";
 
 class TrieNode {
   constructor(key, value) {
@@ -54,12 +54,16 @@ export class Trie {
     const currentBucket = this.get(key);
 
     if (currentBucket) {
-      currentBucket.value.set(field, value);
+      currentBucket.value.insert(field, value);
     } else {
-      const hashTable = new HashTable();
-      hashTable.set(field, value);
+      const hashTable = new IncrementalHashTable();
+      hashTable.insert(field, value);
 
       this.set(key, hashTable);
     }
   }
+  zAdd() {}
+  zRank() {}
+  zRange() {}
+  zScore() {}
 }
