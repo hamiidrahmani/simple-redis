@@ -1,31 +1,42 @@
 import { IncrementalHashTable } from "./IncrementalHashTable.mjs";
 
 class TrieNode {
-  constructor(key, value) {
+  constructor(key) {
     this.key = key;
-    this.value = value;
+    this.value = {
+      simple: null,
+      hashTable: null,
+      orderedList: null,
+    };
     this.children = [];
-    this.type = ""; // string | HashTable
+  }
+
+  getValue(type) {
+    return this.value[type];
+  }
+
+  setValue(type, val) {
+    this.value[type] = val;
   }
 }
 
 export class Trie {
   constructor() {
-    this.root = new TrieNode("", null);
+    this.root = new TrieNode("");
   }
 
-  set(key, value, currentBucket = this.root) {
+  set(type, key, value, currentNode = this.root) {
     if (!key.length) {
-      currentBucket.value = value;
+      currentNode.setValue(type, value);
       return;
     }
-    const foundedNode = this.get(key, currentBucket.children);
+    const foundedNode = this.get(key, currentNode.children);
     if (foundedNode) {
-      foundedNode.value = value;
+      foundedNode.setValue(type, value);
     } else {
       const newNode = new TrieNode(key[0]);
-      currentBucket.children.push(newNode);
-      this.set(key.substring(1), value, newNode);
+      currentNode.children.push(newNode);
+      this.set(type, key.substring(1), value, newNode);
     }
   }
 
@@ -45,21 +56,20 @@ export class Trie {
   }
 
   hGet(key, field) {
-    const currentBucket = this.get(key);
-
-    return currentBucket.value.get(field);
+    const currentNode = this.get(key);
+    const hashTable = currentNode ? currentNode.getValue("hashTable") : null;
+    return hashTable ? hashTable.get(field) : null;
   }
 
   hSet(key, field, value) {
-    const currentBucket = this.get(key);
-
-    if (currentBucket) {
-      currentBucket.value.insert(field, value);
+    const currentNode = this.get(key);
+    const hashTable = currentNode ? currentNode.getValue("hashTable") : null;
+    if (hashTable) {
+      hashTable.insert(field, value);
     } else {
       const hashTable = new IncrementalHashTable();
       hashTable.insert(field, value);
-
-      this.set(key, hashTable);
+      this.set("hashTable", key, hashTable);
     }
   }
   zAdd() {}
