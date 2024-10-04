@@ -1,17 +1,18 @@
 import { fnv1a } from "./Fnv1a.mjs";
 
+const REHASH_BATCH_SIZE = 5; // Number of buckets per call
 export class IncrementalHashTable {
-  constructor(initialCapacity = 4) {
+  constructor(size = 4) {
     this.oldTable = null;
-    this.newTable = new Array(initialCapacity);
+    this.newTable = new Array(size);
     this.size = 0;
-    this.threshold = 0.7;
+    this.threshold = 0.75;
     this.rehashIndex = 0;
     this.rehashing = false;
   }
 
   // Insert key-value pair with duplicate key handling
-  insert(key, value) {
+  add(key, value) {
     if (this.size / this.newTable.length > this.threshold && !this.rehashing) {
       this.startResizing();
     }
@@ -74,7 +75,6 @@ export class IncrementalHashTable {
   incrementalRehash() {
     if (!this.rehashing) return;
 
-    const REHASH_BATCH_SIZE = 1; // Number of buckets per call
     let count = 0;
 
     while (
