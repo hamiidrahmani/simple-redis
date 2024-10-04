@@ -36,6 +36,8 @@ export class SkipList {
       if (!node.right || node.right.value > value) {
         intermediateNodes.unshift(node);
         node = node.down;
+      } else if (node.right.key === key) {
+        return (node.right.value = value);
       } else {
         node = node.right;
       }
