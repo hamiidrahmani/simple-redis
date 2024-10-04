@@ -1,4 +1,5 @@
 import { IncrementalHashTable } from "./IncrementalHashTable.mjs";
+import { SkipList } from "./SkipList.mjs";
 
 class TrieNode {
   constructor(key) {
@@ -25,6 +26,7 @@ export class Trie {
     this.root = new TrieNode("");
   }
 
+  // simple
   set(type, key, value, currentNode = this.root) {
     if (!key.length) {
       currentNode.setValue(type, value);
@@ -55,6 +57,7 @@ export class Trie {
     }
   }
 
+  // hashTable
   hGet(key, field) {
     const currentNode = this.get(key);
     const hashTable = currentNode ? currentNode.getValue("hashTable") : null;
@@ -72,8 +75,31 @@ export class Trie {
       this.set("hashTable", key, hashTable);
     }
   }
-  zAdd() {}
-  zRank() {}
+
+  // orderedList
+  zAdd(key, score, member) {
+    const currentNode = this.get(key);
+    const skipList = currentNode ? currentNode.getValue("orderedList") : null;
+    if (skipList) {
+      skipList.add(score, member);
+    } else {
+      const skipList = new SkipList();
+      skipList.add(score, member);
+      this.set("orderedList", key, skipList);
+    }
+  }
+
+  zScore(key, member) {
+    const currentNode = this.get(key);
+    const skipList = currentNode ? currentNode.getValue("orderedList") : null;
+    return skipList ? skipList.get(member) : null;
+  }
+
+  zRank(key, member) {
+    const currentNode = this.get(key);
+    const skipList = currentNode ? currentNode.getValue("orderedList") : null;
+    return skipList ? skipList.rank(member) : null;
+  }
+
   zRange() {}
-  zScore() {}
 }
