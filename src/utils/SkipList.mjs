@@ -16,7 +16,7 @@ export class SkipList {
   get(key) {
     let node = this.head;
     while (node) {
-      if (!node.right || node.right.key > key) {
+      if (!node.right || node.right.value > value) {
         node = node.down;
       } else if (node.right.key === key) {
         return node.right.value;
@@ -27,13 +27,13 @@ export class SkipList {
     return null;
   }
 
-  add(key, value) {
+  add(value, key) {
     const intermediateNodes = [];
     let node = this.head;
 
     // Locate insertion point by create intermediate nodes array
     while (node) {
-      if (!node.right || node.right.key > key) {
+      if (!node.right || node.right.value > value) {
         intermediateNodes.unshift(node);
         node = node.down;
       } else {
