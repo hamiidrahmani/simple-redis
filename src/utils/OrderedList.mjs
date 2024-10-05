@@ -8,29 +8,27 @@ export class OrderedList {
   }
 
   add(key, value) {
+    const node = this.hashTable.get(key);
+    if (node !== null || node !== undefined) {
+      this.delete(key, node);
+    }
     this.skipList.add(value, key);
     this.hashTable.add(key, value);
   }
 
-  getRank(key) {
-    let node = this.skipList.head;
-    let rank = 0;
-
-    while (node) {
-      while (node.right && node.right.key < key) {
-        rank++;
-        node = node.right;
-      }
-      if (node.right && node.right.key === key) {
-        return rank;
-      }
-      node = node.down;
-    }
-
-    return null; // Key not found
+  delete(key, value) {
+    return this.skipList.delete(key, value);
   }
 
   getScore(key) {
     return this.hashTable.get(key);
+  }
+
+  getRank(key) {
+    return this.skipList.getIndex(key);
+  }
+
+  getRange(from, to) {
+    return this.skipList.getList(from, to);
   }
 }

@@ -68,10 +68,10 @@ export class Trie {
     const currentNode = this.get(key);
     const hashTable = currentNode ? currentNode.getValue("hashTable") : null;
     if (hashTable) {
-      hashTable.insert(field, value);
+      hashTable.add(field, value);
     } else {
       const hashTable = new IncrementalHashTable();
-      hashTable.insert(field, value);
+      hashTable.add(field, value);
       this.set("hashTable", key, hashTable);
     }
   }
@@ -98,7 +98,13 @@ export class Trie {
       : null;
     return orderedList ? orderedList.getScore(member) : null;
   }
-
+  zDelete(key, score, member) {
+    const currentNode = this.get(key);
+    const orderedList = currentNode
+      ? currentNode.getValue("orderedList")
+      : null;
+    return orderedList.delete(member, score);
+  }
   zRank(key, member) {
     const currentNode = this.get(key);
     const orderedList = currentNode
@@ -107,5 +113,11 @@ export class Trie {
     return orderedList ? orderedList.getRank(member) : null;
   }
 
-  zRange() {}
+  zRange(key, start, end) {
+    const currentNode = this.get(key);
+    const orderedList = currentNode
+      ? currentNode.getValue("orderedList")
+      : null;
+    return orderedList ? orderedList.getRange(start, end) : null;
+  }
 }
