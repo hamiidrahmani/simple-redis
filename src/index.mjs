@@ -1,14 +1,17 @@
-import { HashTable } from "./utils/HashTable.mjs";
-import { Trie } from "./utils/Trie.mjs";
-import { RadixTree } from "./utils/RadixTree.mjs";
+import { writeFileSync } from "fs";
+import { Redis } from "./utils/Redis.mjs";
 
 function init() {
-  const trie = new RadixTree();
-  trie.hSet("test", "name", "John");
-  trie.hSet("testing", "family", "Smith");
-  trie.hSet("tester", "age", "40");
-
-  console.log(JSON.stringify(trie));
+  const redis = new Redis();
+  redis.set("hello", "majid");
+  redis.set("help", "hamid");
+  redis.hSet("help", "name", "John");
+  redis.hSet("testing", "family", "Smith");
+  redis.hSet("tester", "age", "40");
+  redis.zAdd("tester", 10, "omid");
+  redis.zAdd("tester", 20, "hamid");
+  redis.zAdd("tester", 40, "majid");
+  writeFileSync("./output.json", JSON.stringify(redis, null, 2), "utf-8");
 }
 
 init();

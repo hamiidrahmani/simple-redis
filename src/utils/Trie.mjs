@@ -1,6 +1,3 @@
-import { IncrementalHashTable } from "./IncrementalHashTable.mjs";
-import { OrderedList } from "./OrderedList.mjs";
-
 class TrieNode {
   constructor(key) {
     this.key = key;
@@ -71,67 +68,8 @@ export class Trie {
     return null;
   }
 
-  // hashTable
-  hGet(key, field) {
+  getValue(key, type) {
     const currentNode = this.get(key);
-    const hashTable = currentNode ? currentNode.getValue("hashTable") : null;
-    return hashTable ? hashTable.get(field) : null;
-  }
-
-  hSet(key, field, value) {
-    const currentNode = this.get(key);
-    const hashTable = currentNode ? currentNode.getValue("hashTable") : null;
-    if (hashTable) {
-      hashTable.add(field, value);
-    } else {
-      const hashTable = new IncrementalHashTable();
-      hashTable.add(field, value);
-      this.set("hashTable", key, hashTable);
-    }
-  }
-
-  // orderedList
-  zAdd(key, score, member) {
-    const currentNode = this.get(key);
-    const orderedList = currentNode
-      ? currentNode.getValue("orderedList")
-      : null;
-    if (orderedList) {
-      orderedList.add(member, score);
-    } else {
-      const orderedList = new OrderedList();
-      orderedList.add(member, score);
-      this.set("orderedList", key, orderedList);
-    }
-  }
-
-  zScore(key, member) {
-    const currentNode = this.get(key);
-    const orderedList = currentNode
-      ? currentNode.getValue("orderedList")
-      : null;
-    return orderedList ? orderedList.getScore(member) : null;
-  }
-  zDelete(key, score, member) {
-    const currentNode = this.get(key);
-    const orderedList = currentNode
-      ? currentNode.getValue("orderedList")
-      : null;
-    return orderedList.delete(member, score);
-  }
-  zRank(key, member) {
-    const currentNode = this.get(key);
-    const orderedList = currentNode
-      ? currentNode.getValue("orderedList")
-      : null;
-    return orderedList ? orderedList.getRank(member) : null;
-  }
-
-  zRange(key, start, end) {
-    const currentNode = this.get(key);
-    const orderedList = currentNode
-      ? currentNode.getValue("orderedList")
-      : null;
-    return orderedList ? orderedList.getRange(start, end) : null;
+    return currentNode ? currentNode.getValue(type) : null;
   }
 }
