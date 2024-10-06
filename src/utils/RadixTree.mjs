@@ -1,4 +1,4 @@
-import { HashTable } from "./HashTable.mjs";
+import { IncrementalHashTable } from "./IncrementalHashTable.mjs";
 
 class RadixNode {
   constructor(key, value) {
@@ -13,51 +13,106 @@ export class RadixTree {
     this.root = new RadixNode("", null);
   }
 
-  set(key, value, currentBucket = this.root) {
+  set(key, value) {
+    let currentNode = this.root;
+
     if (!key.length) {
-      currentBucket.value = value;
+      currentNode.value = value;
       return;
     }
 
-    for (let i = 0; i < currentBucket.children.length; i++) {
-      let [childKey, childNode] = currentBucket.children[i];
-      let commonPrefixLength = this._getCommonPrefixLength(key, childKey);
+    let i = 0;
 
-      if (commonPrefixLength > 0) {
-        if (commonPrefixLength === childKey.length) {
-          this.set(key.substring(commonPrefixLength), value, childNode);
+    while (i < key.length) {
+      const char = key[i];
+      let foundNode = null;
+
+      for (let index = 0; index < currentNode.children.length; index++) {
+        if (currentNode.children[index].key[0] === char) {
+          foundNode = currentNode.children[index];
+          break;
+        }
+      }
+
+      if (!foundNode) {
+        foundNode = new RadixNode(key.substring(i), value);
+        currentNode.children.push(foundNode);
+        return;
+      }
+
+      let j = 0;
+      while (
+        j < foundNode.key.length &&
+        i < key.length &&
+        foundNode.key[j] === key[i]
+      ) {
+        j++;
+        i++;
+      }
+
+      if (j === foundNode.key.length) {
+        currentNode = foundNode;
+      } else {
+        const commonPrefix = foundNode.key.substring(0, j);
+        const remainingKey = foundNode.key.substring(j);
+        const newNode = new RadixNode(remainingKey, foundNode.value);
+        newNode.children = foundNode.children;
+
+        foundNode.key = commonPrefix;
+        foundNode.value = null;
+        foundNode.children = [newNode];
+
+        if (i < key.length) {
+          const newChild = new RadixNode(key.substring(i), value);
+          foundNode.children.push(newChild);
         } else {
-          let newChildKey = childKey.substring(commonPrefixLength);
-          let newChildNode = new RadixNode(newChildKey, childNode.value);
-          newChildNode.children = childNode.children;
-
-          childNode.key = childKey.substring(0, commonPrefixLength);
-          childNode.value = null;
-          childNode.children = [];
-          childNode.children.push([newChildKey, newChildNode]);
-
-          this.set(key.substring(commonPrefixLength), value, childNode);
+          foundNode.value = value;
         }
         return;
       }
     }
 
-    currentBucket.children.push([key, new RadixNode(key, value)]);
+    currentNode.value = value;
   }
 
-  get(key, currentBucket = this.root) {
-    if (!key.length) {
-      return currentBucket;
-    }
+  get(key) {
+    let currentNode = this.root;
+    let i = 0;
 
-    for (let i = 0; i < currentBucket.children.length; i++) {
-      let [childKey, childNode] = currentBucket.children[i];
-      if (key.startsWith(childKey)) {
-        return this.get(key.substring(childKey.length), childNode);
+    while (i < key.length) {
+      const char = key[i];
+      // let foundNode = node.children.find((child) => child.key[0] === char);
+      let foundNode = null;
+
+      for (let index = 0; index < currentNode.children.length; index++) {
+        if (currentNode.children[index].key[0] === char) {
+          foundNode = currentNode.children[index];
+          break;
+        }
+      }
+
+      if (!foundNode) {
+        return null;
+      }
+
+      let j = 0;
+      while (
+        j < foundNode.key.length &&
+        i < key.length &&
+        foundNode.key[j] === key[i]
+      ) {
+        j++;
+        i++;
+      }
+
+      if (j === foundNode.key.length) {
+        currentNode = foundNode;
+      } else {
+        return null;
       }
     }
 
-    return null;
+    return currentNode;
   }
 
   hGet(key, field) {
@@ -71,21 +126,9 @@ export class RadixTree {
     if (currentBucket) {
       currentBucket.value.set(field, value);
     } else {
-      const hashTable = new HashTable();
-      hashTable.set(field, value);
+      const hashTable = new IncrementalHashTable();
+      hashTable.add(field, value);
       this.set(key, hashTable);
     }
-  }
-
-  _getCommonPrefixLength(str1, str2) {
-    let length = 0;
-    while (
-      length < str1.length &&
-      length < str2.length &&
-      str1[length] === str2[length]
-    ) {
-      length++;
-    }
-    return length;
   }
 }
