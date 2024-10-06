@@ -43,7 +43,6 @@ export class SkipList {
     const intermediateNodes = [];
     let node = this.head;
 
-    // Locate insertion point by create intermediate nodes array
     while (node) {
       if (!node.right || node.right.value > value) {
         intermediateNodes.unshift(node);
@@ -55,7 +54,6 @@ export class SkipList {
       }
     }
 
-    // Add node and levelUp randomly
     let shouldPromote = true;
     let downNode = null;
     while (shouldPromote && intermediateNodes.length) {
@@ -68,7 +66,6 @@ export class SkipList {
       downNode = newNode;
     }
 
-    // Add new level randomly
     if (shouldPromote) {
       const newHead = new SkipListNode(null, null);
       newHead.right = new SkipListNode(key, value);

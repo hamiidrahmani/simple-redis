@@ -1,12 +1,13 @@
 import { IncrementalHashTable } from "./IncrementalHashTable.mjs";
 import { OrderedList } from "./OrderedList.mjs";
 import { Trie } from "./Trie.mjs";
+import { RadixTree } from "./RadixTree.mjs";
 
 export class Redis {
   trie = null;
 
   constructor() {
-    this.trie = new Trie();
+    this.trie = new RadixTree();
   }
 
   // Simple Value

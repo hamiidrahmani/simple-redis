@@ -51,7 +51,7 @@ export class Trie {
       currentNode = foundNode;
     }
 
-    currentNode.setValue(type, value); // Store the value in the last node
+    currentNode.setValue(type, value);
   }
 
   get(key, children = this.root.children) {

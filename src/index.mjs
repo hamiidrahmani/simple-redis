@@ -5,8 +5,8 @@ function init() {
   const redis = new Redis();
   redis.set("hello", "majid");
   redis.set("help", "hamid");
-  redis.hSet("help", "name", "John");
-  redis.hSet("testing", "family", "Smith");
+  redis.hSet("help", "name", "majid");
+  redis.hSet("testing", "family", "heydari");
   redis.hSet("tester", "age", "40");
   redis.zAdd("tester", 10, "omid");
   redis.zAdd("tester", 20, "hamid");

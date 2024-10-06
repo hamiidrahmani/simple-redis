@@ -1,0 +1,205 @@
+{
+  "trie": {
+    "root": {
+      "children": [
+        [
+          "hel",
+          {
+            "children": [
+              [
+                "lo",
+                {
+                  "children": [],
+                  "value": {
+                    "simple": "majid",
+                    "hashTable": null,
+                    "orderedList": null
+                  }
+                }
+              ],
+              [
+                "p",
+                {
+                  "children": [],
+                  "value": {
+                    "simple": "hamid",
+                    "hashTable": {
+                      "oldTable": null,
+                      "newTable": [
+                        null,
+                        null,
+                        [
+                          [
+                            "name",
+                            "John"
+                          ]
+                        ],
+                        null
+                      ],
+                      "size": 1,
+                      "threshold": 0.7,
+                      "rehashIndex": 0,
+                      "rehashing": false
+                    },
+                    "orderedList": null
+                  }
+                }
+              ]
+            ],
+            "value": {
+              "simple": null,
+              "hashTable": null,
+              "orderedList": null
+            }
+          }
+        ],
+        [
+          "test",
+          {
+            "children": [
+              [
+                "ing",
+                {
+                  "children": [],
+                  "value": {
+                    "simple": null,
+                    "hashTable": {
+                      "oldTable": null,
+                      "newTable": [
+                        null,
+                        [
+                          [
+                            "family",
+                            "Smith"
+                          ]
+                        ],
+                        null,
+                        null
+                      ],
+                      "size": 1,
+                      "threshold": 0.7,
+                      "rehashIndex": 0,
+                      "rehashing": false
+                    },
+                    "orderedList": null
+                  }
+                }
+              ],
+              [
+                "er",
+                {
+                  "children": [],
+                  "value": {
+                    "simple": null,
+                    "hashTable": {
+                      "oldTable": null,
+                      "newTable": [
+                        [
+                          [
+                            "age",
+                            "40"
+                          ]
+                        ],
+                        null,
+                        null,
+                        null
+                      ],
+                      "size": 1,
+                      "threshold": 0.7,
+                      "rehashIndex": 0,
+                      "rehashing": false
+                    },
+                    "orderedList": {
+                      "skipList": {
+                        "head": {
+                          "key": null,
+                          "value": null,
+                          "right": {
+                            "key": "majid",
+                            "value": 40,
+                            "right": null,
+                            "down": {
+                              "key": "majid",
+                              "value": 40,
+                              "right": null,
+                              "down": null,
+                              "index": null
+                            },
+                            "index": null
+                          },
+                          "down": {
+                            "key": null,
+                            "value": null,
+                            "right": {
+                              "key": "omid",
+                              "value": 10,
+                              "right": {
+                                "key": "hamid",
+                                "value": 20,
+                                "right": {
+                                  "key": "majid",
+                                  "value": 40,
+                                  "right": null,
+                                  "down": null,
+                                  "index": null
+                                },
+                                "down": null,
+                                "index": null
+                              },
+                              "down": null,
+                              "index": null
+                            },
+                            "down": null,
+                            "index": null
+                          },
+                          "index": null
+                        }
+                      },
+                      "hashTable": {
+                        "oldTable": null,
+                        "newTable": [
+                          [
+                            [
+                              "omid",
+                              10
+                            ],
+                            [
+                              "hamid",
+                              20
+                            ]
+                          ],
+                          null,
+                          [
+                            [
+                              "majid",
+                              40
+                            ]
+                          ],
+                          null
+                        ],
+                        "size": 3,
+                        "threshold": 0.7,
+                        "rehashIndex": 0,
+                        "rehashing": false
+                      }
+                    }
+                  }
+                }
+              ]
+            ],
+            "value": {
+              "simple": null,
+              "hashTable": null,
+              "orderedList": null
+            }
+          }
+        ]
+      ],
+      "value": {
+        "simple": null,
+        "hashTable": null,
+        "orderedList": null
+      }
+    }
+  }
+}
