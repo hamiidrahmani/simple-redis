@@ -27,19 +27,34 @@ export class Trie {
   }
 
   // simple
-  set(type, key, value, currentNode = this.root) {
+  set(type, key, value) {
+    let currentNode = this.root;
+
     if (!key.length) {
       currentNode.setValue(type, value);
       return;
     }
-    const foundedNode = this.get(key, currentNode.children);
-    if (foundedNode) {
-      foundedNode.setValue(type, value);
-    } else {
-      const newNode = new TrieNode(key[0]);
-      currentNode.children.push(newNode);
-      this.set(type, key.substring(1), value, newNode);
+
+    for (let i = 0; i < key.length; i++) {
+      const char = key[i];
+      let foundNode = null;
+
+      for (let index = 0; index < currentNode.children.length; index++) {
+        if (currentNode.children[index].key === char) {
+          foundNode = currentNode.children[index];
+          break;
+        }
+      }
+
+      if (!foundNode) {
+        foundNode = new TrieNode(char, null);
+        currentNode.children.push(foundNode);
+      }
+
+      currentNode = foundNode;
     }
+
+    currentNode.setValue(type, value); // Store the value in the last node
   }
 
   get(key, children = this.root.children) {
@@ -51,10 +66,9 @@ export class Trie {
           return this.get(key.substring(1), element.children);
         }
         return element;
-      } else {
-        return null;
       }
     }
+    return null;
   }
 
   // hashTable

@@ -6,7 +6,7 @@ export class IncrementalHashTable {
     this.oldTable = null;
     this.newTable = new Array(size);
     this.size = 0;
-    this.threshold = 0.75;
+    this.threshold = 0.7;
     this.rehashIndex = 0;
     this.rehashing = false;
   }
