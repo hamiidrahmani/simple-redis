@@ -1,4 +1,4 @@
-const SIZE_THRESHOLD = 0.8;
+const SIZE_THRESHOLD = 0.75;
 
 export class HashTable {
   balanceFactor = 4;
